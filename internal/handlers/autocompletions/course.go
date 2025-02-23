@@ -23,9 +23,9 @@ func CourseAutocomplete(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	userInput := strings.ToUpper(data.Options[0].StringValue())
 
 	// Get saved course numbers
-	courseNumbers, err := model.GetSavedCourseNumbers()
+	courseNumbers, err := model.GetSavedCourses()
 	if err != nil {
-		log.Println("Error fetching saved courses:", err)
+		log.Println("Error fetching saved courses: ", err)
 		return
 	}
 
@@ -33,9 +33,12 @@ func CourseAutocomplete(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	var choices []*discordgo.ApplicationCommandOptionChoice
 	for _, course := range courseNumbers {
 		if strings.HasPrefix(course, userInput) {
+			// Get the course number by it self
+			courseNumber := strings.Split(course, ",")[0]
+
 			choices = append(choices, &discordgo.ApplicationCommandOptionChoice{
 				Name:  course,
-				Value: course,
+				Value: courseNumber,
 			})
 		}
 		if len(choices) >= 25 { // Discord limits autocomplete results to 25

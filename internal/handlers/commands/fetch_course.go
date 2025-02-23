@@ -13,6 +13,7 @@ import (
 func FetchCourse(s *discordgo.Session, i *discordgo.InteractionCreate, pm *utils.PaginatedSessions) {
 	courseID := i.ApplicationCommandData().Options[0].StringValue()
 
+	// Fetch the course
 	course, err := model.FetchCourse(courseID)
 	if err != nil {
 		log.Printf("Error fetching course: %v", err)
@@ -37,14 +38,26 @@ func FetchCourse(s *discordgo.Session, i *discordgo.InteractionCreate, pm *utils
 		return
 	}
 
-	// Save the course
-	model.SaveCourseToFile(course)
+	// Save the course as course number, title
+	err = model.SaveCourseToFile(fmt.Sprintf("%d, %s", course.CourseNumber, course.Title))
+	if err != nil {
+		log.Println("Failed to save course to file:", err)
+	}
 
 	// Create a new paginated session
 	paginationID := utils.BuildPaginationID()
 
 	fields := make([]utils.Section, 0)
+
+	// log the course GetSectionValue() lengths
 	fields = append(fields, course)
+	fields = append(fields, course.CourseScheduleSection)
+	fields = append(fields, course.CourseExamSection)
+	fields = append(fields, course.CourseResponsibleSection)
+	fields = append(fields, course.CourseAdditionalSection)
+	for _, courseType := range course.CourseTypeSection.CourseType {
+		fields = append(fields, courseType)
+	}
 
 	// Create and store the PaginationData
 	data := &utils.PaginationData{
@@ -52,8 +65,8 @@ func FetchCourse(s *discordgo.Session, i *discordgo.InteractionCreate, pm *utils
 		PageIndex:   0,
 		Description: "",
 		AuthorID:    i.Member.User.ID,
-		Title:       "Fetched course",
-		Footer:      fmt.Sprintf("Fetched from %s", fmt.Sprintf("https://kurser.dtu.dk/course/%s", course.CourseNumber)),
+		Title:       fmt.Sprintf("Fetched course: %s - %s", courseID, course.Title),
+		Footer:      fmt.Sprintf("Fetched from %s", fmt.Sprintf("https://kurser.dtu.dk/course/%d", course.CourseNumber)),
 		Color:       0x606060,
 		CreatedAt:   time.Now(),
 		PageSize:    5,

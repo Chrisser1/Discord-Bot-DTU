@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	"github.com/Chrisser1/Discord-Bot-DTU/internal/utils"
 	"log"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/Chrisser1/Discord-Bot-DTU/internal/utils"
 
 	"github.com/Chrisser1/Discord-Bot-DTU/internal/config"
 	"github.com/Chrisser1/Discord-Bot-DTU/internal/discord"
@@ -61,3 +62,28 @@ func main() {
 	paginationManager.Stop()
 	log.Println("Gracefully shutting down.")
 }
+
+// import (
+// 	"fmt"
+// 	"log"
+
+// 	"github.com/Chrisser1/Discord-Bot-DTU/internal/model"
+// )
+
+// func main() {
+// 	// Set a course number to test (e.g. 2104)
+// 	courseNumber := "02105"
+
+// 	course, err := model.FetchCourse(courseNumber)
+// 	if err != nil {
+// 		log.Fatal("Error fetching course:", err)
+// 	}
+// 	if course == nil {
+// 		log.Println("No course data found for course number:", courseNumber)
+// 		return
+// 	}
+
+// 	// Print out the formatted course section.
+// 	fmt.Println(course.GetSectionName())
+// 	fmt.Println(course.GetSectionValue())
+// }
