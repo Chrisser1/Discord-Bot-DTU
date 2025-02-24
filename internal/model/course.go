@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -141,7 +140,7 @@ type CourseTypeSection struct {
 
 // Course represents the course details.
 type Course struct {
-	CourseNumber             int
+	CourseNumber             string
 	Title                    string
 	DanishTitle              string
 	LanguageOfInstruction    string
@@ -156,7 +155,7 @@ type Course struct {
 
 // GetSectionName returns a formatted section header for Discord
 func (c *Course) GetSectionName() string {
-	return fmt.Sprintf("**Course: %d - %s**", c.CourseNumber, c.Title)
+	return fmt.Sprintf("**Course: %s - %s**", c.CourseNumber, c.Title)
 }
 
 // GetSectionValue returns a formatted course description
@@ -198,15 +197,9 @@ func FetchCourse(courseNumber string) (*Course, error) {
 		return nil, nil
 	}
 
-	// Parse the course number
-	courseIDInt, err := strconv.Atoi(courseNumber)
-	if err != nil {
-		return nil, err
-	}
-
 	// Create a new Course object
 	course := &Course{
-		CourseNumber: courseIDInt,
+		CourseNumber: courseNumber,
 		CourseAdditionalSection: CourseAdditionalSection{
 			FetchTime: time.Now(),
 		},
