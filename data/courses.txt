@@ -1456,4 +1456,3 @@
 63861, System and Network Security - Project
 63880, Data analytics in transport with emphasis on railways
 63881, Railway transport and sustainable logistics2105, Algorithms and Data Structures 1
-2105, Algorithms and Data Structures 1

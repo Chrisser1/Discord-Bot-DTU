@@ -39,7 +39,7 @@ func FetchCourse(s *discordgo.Session, i *discordgo.InteractionCreate, pm *utils
 	}
 
 	// Save the course as course number, title
-	err = model.SaveCourseToFile(fmt.Sprintf("%d, %s", course.CourseNumber, course.Title))
+	err = model.SaveCourseToFile(fmt.Sprintf("%s, %s", course.CourseNumber, course.Title))
 	if err != nil {
 		log.Println("Failed to save course to file:", err)
 	}
@@ -55,9 +55,9 @@ func FetchCourse(s *discordgo.Session, i *discordgo.InteractionCreate, pm *utils
 	fields = append(fields, course.CourseExamSection)
 	fields = append(fields, course.CourseResponsibleSection)
 	fields = append(fields, course.CourseAdditionalSection)
-	for _, courseType := range course.CourseTypeSection.CourseType {
-		fields = append(fields, courseType)
-	}
+	// for _, courseType := range course.CourseTypeSection.CourseType {
+	// 	fields = append(fields, courseType)
+	// }
 
 	// Create and store the PaginationData
 	data := &utils.PaginationData{
@@ -66,7 +66,7 @@ func FetchCourse(s *discordgo.Session, i *discordgo.InteractionCreate, pm *utils
 		Description: "",
 		AuthorID:    i.Member.User.ID,
 		Title:       fmt.Sprintf("Fetched course: %s - %s", courseID, course.Title),
-		Footer:      fmt.Sprintf("Fetched from %s", fmt.Sprintf("https://kurser.dtu.dk/course/%d", course.CourseNumber)),
+		Footer:      fmt.Sprintf("Fetched from %s", fmt.Sprintf("https://kurser.dtu.dk/course/%s", course.CourseNumber)),
 		Color:       0x606060,
 		CreatedAt:   time.Now(),
 		PageSize:    5,
